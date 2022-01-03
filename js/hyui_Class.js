@@ -757,6 +757,15 @@ $(function () {
     constructor(obj) {
       this.name = obj.name.find(".nav").find(".nav-item");
       this.btn = obj.name.find(".nav").find(".nav-item button");
+      this.objName = obj.name;
+    }
+    attrNum() {
+      this.objName.find(".nav-link").each(function (idx, item) {
+        $(this).attr("data-btn", idx + 1);
+      });
+      this.objName.find(".tab-pane").each(function (idx, item) {
+        $(this).attr("data-tabcontent", idx + 1);
+      });
     }
     tabClick() {
       let that = this;
@@ -765,9 +774,9 @@ $(function () {
       function navTab() {
         $(this).addClass("active");
         $(this).parent().siblings().children().removeClass("active");
-        $(".nav-item button active").focus();
+
+        $(this).focus();
         let activeTabBtn = that.name.find(".active");
-        activeTabBtn.attr("data-btn");
         let tabContent = $(this).parent().parent().next().children();
         tabContent.each(function (index, item) {
           if (
@@ -801,8 +810,8 @@ $(function () {
         }
       }
     }
-
     initial() {
+      this.attrNum();
       this.tabClick();
       this.tabKeydown();
     }
@@ -811,6 +820,10 @@ $(function () {
     name: $(".nav-tab"),
   });
   tab1.initial();
+  let tab2 = new BtnTab({
+    name: $(".nav-tab2"),
+  });
+  tab2.initial();
 
   /*-----------------------------------*/
   ///////////////置頂go to top////////////
