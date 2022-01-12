@@ -1444,4 +1444,62 @@ $(function () {
     fadeTime: 600,
     threshold: 0,
   });
+
+  /*-----------------------------------*/
+  //////// 新增 按鈕型 Popovers 設定 ///////
+  /*-----------------------------------*/
+  // 電腦版查詢
+  class Popovers {
+    constructor(obj) {
+      this.name = obj.name;
+    }
+    btnClick() {
+      let that = this;
+      this.name.off().on("click", function (e) {
+        $(this).parent().siblings().children(".popContent").removeClass("open");
+        $(this).next().toggleClass("open");
+        let openContent = $(this).next().hasClass("open");
+        if (openContent === true) {
+          $(".popovers button").next().slideUp();
+          $(this)
+            .siblings(".popContent")
+            .stop(true, false)
+            .slideDown("400", "easeOutQuint");
+          $(this).siblings(".customer_service_block").slideUp();
+          $("body").keydown(function (e) {
+            if (e.keyCode == 27) {
+              $(".popContent").slideUp();
+              this.pop_status = false;
+            }
+          });
+
+          $(window).off("resize");
+          that.pop_status = true;
+        } else {
+          $(this).next().stop().slideUp();
+        }
+        e.stopPropagation();
+      });
+    }
+    // 如果點在外面
+    closePopovers() {
+      let that = this;
+      $("body").on("click touchend", function (e) {
+        that.name.next().slideUp();
+        $(".popContent").removeClass("open");
+      });
+      // 如果點在區域內則不受限制
+      $(".popContent").click(function (e) {
+        e.stopPropagation();
+      });
+    }
+    initial() {
+      this.btnClick();
+      this.closePopovers();
+    }
+  }
+  let search_btn = new Popovers({
+    name: $(".search_btn"),
+  });
+  search_btn.initial();
 });
